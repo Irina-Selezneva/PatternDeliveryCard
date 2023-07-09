@@ -1,7 +1,11 @@
 package ru.netology.patterns;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -14,13 +18,26 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class DeliveryTest {
+
+
     private static Faker faker;
+
 
     @BeforeEach
     void setup() {
         Configuration.holdBrowserOpen = true;
         Configuration.timeout = 15000;
         open("http://localhost:9999/");
+    }
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     @Test
@@ -54,5 +71,5 @@ public class DeliveryTest {
                 .shouldBe(visible);
     }
 
-
 }
+
